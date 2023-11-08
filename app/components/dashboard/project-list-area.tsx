@@ -4,7 +4,7 @@ import ProjectTable from "./project-table";
 
 const ProjectListArea = () => {
   return (
-    <Paper w="100%" maw={800} p={24} mx="auto" radius="md" shadow="md">
+    <Paper w="100%" maw={1200} p={24} mx="auto" radius="md" shadow="md">
       <Title order={2}>案件リスト</Title>
       <ProjectTable />
     </Paper>

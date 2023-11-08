@@ -27,9 +27,9 @@ const NabBar: FC = () => {
             <Box>髙島屋様ポータルサイト</Box>
           </Link>
           <Flex gap={12}>
-            <Flex>
+            <Flex gap={12}>
               {headerLinks.map(({ title, path, icon }, idx) => (
-                <Link key="idx" href={path}>
+                <Link key={idx} href={path}>
                   <Flex
                     gap={6}
                     align="center"
