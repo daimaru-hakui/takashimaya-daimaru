@@ -5,6 +5,7 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import React, { FC } from "react";
 import { useHover } from "@mantine/hooks";
+import { MdLogout } from "react-icons/md";
 
 const NabBar: FC = () => {
   const { hovered, ref } = useHover();
@@ -12,7 +13,7 @@ const NabBar: FC = () => {
     signOut();
   };
   return (
-    <Box component="header" w="100%" bg="white">
+    <Box component="header" w="100%" bg="white" pos="sticky" top={0}>
       <Paper shadow="xs">
         <Flex
           w="100%"
@@ -26,7 +27,7 @@ const NabBar: FC = () => {
           <Link href="/dashboard">
             <Box>髙島屋様ポータルサイト</Box>
           </Link>
-          <Flex gap={12}>
+          <Flex gap={20}>
             <Flex gap={12}>
               {headerLinks.map(({ title, path, icon }, idx) => (
                 <Link key={idx} href={path}>
@@ -42,9 +43,13 @@ const NabBar: FC = () => {
                 </Link>
               ))}
             </Flex>
-            <Box fz="sm" style={{ cursor: "pointer" }} onClick={logout}>
-              ログアウト
-            </Box>
+            <Flex
+              fz="sm"
+              gap={6}
+              align="center" style={{ cursor: "pointer" }} onClick={logout}
+            >
+              <MdLogout /><Box>ログアウト</Box>
+            </Flex>
           </Flex>
         </Flex>
       </Paper>

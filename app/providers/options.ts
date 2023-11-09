@@ -15,6 +15,7 @@ export const options: NextAuthOptions =({
             const user = {
               id: decoded.uid,
               emailVerified: decoded.email_verified,
+              email:decoded.email,
               ...decoded
             }
             return {...user}
@@ -36,6 +37,7 @@ export const options: NextAuthOptions =({
     async session({ session, token }) {
       session.user.emailVerified = token.emailVerified;
       session.user.uid = token.uid;
+      session.user.email;
       return session;
     }
   }

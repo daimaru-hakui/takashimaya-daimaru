@@ -1,25 +1,22 @@
 "use client";
 import { db } from '@/firebase/client';
-import { Project } from '@/types';
-import { Box, Button, Center, Flex, Input, Textarea } from '@mantine/core';
-import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, serverTimestamp, setDoc } from 'firebase/firestore';
-import React, { FC, useEffect, useState } from 'react';
+import { Message, Project } from '@/types';
+import { Box, Flex, } from '@mantine/core';
+import { collection, doc, getDoc, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import ChatMessage from './chat-message';
+import ChatInput from './chat-Input';
+import Link from 'next/link';
+import { AiOutlineFolder } from "react-icons/ai";
 
 interface Props {
   id: string;
 }
 
-type Message = {
-  id: string;
-  content: string;
-  cratedAt: any;
-};
-
 const ChatArea: FC<Props> = ({ id }) => {
-
   const [project, setProject] = useState<Project>();
-  const [content, setContent] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const getProject = async () => {
@@ -31,11 +28,10 @@ const ChatArea: FC<Props> = ({ id }) => {
     getProject();
   }, [id]);
 
-
   useEffect(() => {
     const getMessages = async () => {
       const coll = collection(db, "projects", `${id}`, "messages");
-      const q = query(coll, orderBy("createdAt", "desc"));
+      const q = query(coll, where("deletedAt", "==", null), orderBy("createdAt", "desc"));
       onSnapshot(q, (snapshot) => {
         setMessages(snapshot.docs.map((doc) => (
           { ...doc.data(), id: doc.id } as Message
@@ -45,38 +41,31 @@ const ChatArea: FC<Props> = ({ id }) => {
     getMessages();
   }, [id]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value);
-  };
-
-
-  const createMessage = async () => {
-    const coll = collection(db, "projects", `${id}`, "messages");
-    await addDoc(coll, {
-      content,
-      createdAt: serverTimestamp()
-    });
-    setContent("");
-  };
-
   return (
     <Flex h="100%" direction="column" align="center" >
-      <div>{project?.title}</div>
-      <Box>
-        {messages.map((message) => (
-          <Box key={message.id}>{message.content}</Box>
-        ))}
-      </Box>
-      <Flex w="80%" gap={12} pos="fixed" bottom={50} justify="space-between">
-        <Textarea w="100%" autosize={true} value={content} onChange={handleChange} />
-        <Button
-          onClick={createMessage}
-        >
-          投稿
-        </Button>
+      <Flex gap={12}>
+        <Box>{project?.title}</Box>
+        {project?.fileLink && (
+          <Link href={project?.fileLink ? project?.fileLink : "#"}>
+            <Flex align="center">
+              <AiOutlineFolder style={{ cursor: "pointer", fontSize: 24 }} />
+            </Flex>
+          </Link>
+        )}
       </Flex>
+      <Flex
+        direction="column-reverse"
+        w="100%"
+        maw={600}
+        style={{ overflow: "auto", maxHeight: "calc(100vh - 200px)" }}
+      >
+        {messages.map((message) => (
+          <ChatMessage key={message.id} message={message} id={id} />
+        ))}
+      </Flex>
+      <ChatInput id={id}
+      />
     </Flex>
-
   );
 };
 

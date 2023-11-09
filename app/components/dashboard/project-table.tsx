@@ -30,12 +30,14 @@ const ProjectTable = () => {
           <Table.Th>登録日</Table.Th>
           <Table.Th>案件名</Table.Th>
           <Table.Th>担当者名</Table.Th>
+          <Table.Th>担当者名</Table.Th>
+          <Table.Th>種別</Table.Th>
           <Table.Th>売上規模</Table.Th>
           <Table.Th>納期</Table.Th>
           <Table.Th>進捗率</Table.Th>
           <Table.Th>ステータス</Table.Th>
-          <Table.Th>コメント</Table.Th>
-          <Table.Th ta="center">編集</Table.Th>
+          <Table.Th>メモ</Table.Th>
+          <Table.Th ta="center">アクション</Table.Th>
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>

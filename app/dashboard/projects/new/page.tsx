@@ -9,10 +9,13 @@ const ProjectNew = () => {
   const defaultValues = {
     id: "",
     title: "",
-    staff: "",
+    staff1: "",
+    staff2: "",
     deadline: format(new Date(), "yyyy-MM-dd"),
     sales: 0,
     status: "NEGOTIATION",
+    orderType: "",
+    fileLink: "",
     comment: ""
   };
   return (

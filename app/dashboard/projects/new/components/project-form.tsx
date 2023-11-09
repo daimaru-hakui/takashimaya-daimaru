@@ -3,6 +3,8 @@ import {
   Box,
   Button,
   Flex,
+  Group,
+  Radio,
   Stack,
   Text,
   TextInput,
@@ -19,10 +21,13 @@ import { format } from "date-fns";
 type Inputs = {
   id: string;
   title: string;
-  staff: string;
+  staff1: string;
+  staff2: string;
   deadline: string;
   sales: number;
   status: string;
+  orderType: string;
+  fileLink: string;
   comment: string;
 };
 
@@ -60,12 +65,16 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
     const docsRef = collection(db, "projects");
     try {
       await addDoc(docsRef, {
+        title: data.title,
         sales: Number(data.sales),
-        staff: data.staff || "",
+        staff1: data.staff1 || "",
+        staff2: data.staff2 || "",
         deadline: data.deadline || format(new Date(), "yyyy-MM-dd"),
         createdAt: serverTimestamp(),
         comment: data.comment || "",
         status: "NEGOTIATION",
+        orderType: data.orderType,
+        fileLink: data.fileLink || "",
         progress: 0
       });
       reset();
@@ -80,12 +89,16 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
     const docsRef = doc(db, "projects", `${data.id}`);
     try {
       await updateDoc(docsRef, {
+        title: data.title,
         sales: Number(data.sales),
-        staff: data.staff || "",
+        staff1: data.staff1 || "",
+        staff2: data.staff2 || "",
         deadline: data.deadline || format(new Date(), "yyyy-MM-dd"),
         updatedAt: serverTimestamp(),
         comment: data.comment || "",
         status: data.status,
+        orderType: data.orderType,
+        fileLink: data.fileLink,
         progress: 0
       });
     } catch (error) {
@@ -99,7 +112,14 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
         <Title order={2}>案件登録</Title>
         <Stack gap={24} mt={24}>
           <TextInput label="案件名" {...register("title", { required: true })} />
-          <TextInput label="担当者名" {...register("staff")} />
+          <Flex gap={12}>
+            <TextInput label="担当者名1" {...register("staff1")} />
+            <TextInput label="担当者名2" {...register("staff2")} />
+          </Flex>
+          <Group>
+            <Radio label="既製品" value="READY" {...register("orderType")} />
+            <Radio label="別注品" value="ORDER" {...register("orderType")} />
+          </Group>
           <Box>
             <Text fz="sm">売上規模</Text>
             <input
@@ -110,7 +130,13 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
               {...register("sales")}
             />
           </Box>
-          <TextInput type="date" defaultValue={defaultValues.deadline} label="納期" />
+          <TextInput
+            type="date"
+            defaultValue={defaultValues.deadline}
+            label="納期"
+            {...register("deadline")}
+          />
+          <TextInput label="ファイルリンク" {...register("fileLink")} />
           <Textarea {...register("comment")}></Textarea>
           <Button type="submit" fullWidth>{pageType === "NEW" ? "登録" : "更新"}</Button>
         </Stack>
