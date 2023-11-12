@@ -1,6 +1,6 @@
 import { db } from '@/firebase/client';
 import { Project } from '@/types';
-import { Box, Flex, Stack, Switch } from '@mantine/core';
+import { Box, Divider, Flex, Stack, Switch } from '@mantine/core';
 import { doc, updateDoc } from 'firebase/firestore';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import DetailRingProgress from './detail-ring-progress';
@@ -42,6 +42,7 @@ const DetailTodo: FC<Props> = ({ project }) => {
     <>
       {project.todos?.length > 0 && (
         <>
+          <Divider my="sm" />
           <Box>進捗状況</Box>
           <Flex justify="space-between">
             <Stack gap={12} mt="sm">

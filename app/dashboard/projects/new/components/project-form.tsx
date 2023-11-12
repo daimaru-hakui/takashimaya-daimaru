@@ -160,7 +160,7 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
             />
           </Group>
           <Box>
-            <Text fz="sm">売上規模</Text>
+            <Text fz="sm">売上規模（万円）</Text>
             <input
               type="number"
               className={`${classes.input}`}
@@ -180,7 +180,10 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
             <Box fz="sm">進捗リスト項目</Box>
             {fields.map((field, idx) => (
               <Flex key={field.id} align="center" justify="space-between" gap={12}>
-                <TextInput w="100%" {...register(`todos.${idx}.title`)} />
+                <TextInput
+                  w="100%"
+                  {...register(`todos.${idx}.title`, { required: true })} required
+                />
                 <AiOutlineDelete
                   style={{ cursor: "pointer", fontSize: 20 }}
                   onClick={() => removeTodo(idx)}

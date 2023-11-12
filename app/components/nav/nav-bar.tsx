@@ -1,25 +1,27 @@
 "use client";
 import { headerLinks } from "@/utils/header-link";
-import { Box, Button, Flex, Paper } from "@mantine/core";
+import { Box, Flex, Paper } from "@mantine/core";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import React, { FC } from "react";
-import { useHover } from "@mantine/hooks";
 import { MdLogout } from "react-icons/md";
+import NavBarItem from "./nav-bar-item";
+import NavDrawer from "./nav-drawer";
 
 const NabBar: FC = () => {
-  const { hovered, ref } = useHover();
+
   const logout = () => {
     signOut();
   };
+
   return (
     <Box component="header" w="100%" bg="white" pos="sticky" top={0} style={{ zIndex: 100 }}>
-      <Paper shadow="xs">
+      <Paper shadow="xs" >
         <Flex
           w="100%"
-          maw={1200}
+          maw={1300}
           h={50}
-          px={3}
+          px="lg"
           mx="auto"
           justify="space-between"
           align="center"
@@ -27,29 +29,22 @@ const NabBar: FC = () => {
           <Link href="/dashboard">
             <Box fw="bold">髙島屋様ポータルサイト</Box>
           </Link>
-          <Flex gap={20}>
-            <Flex gap={12}>
+          <Flex gap={16} display={{ base: "none", md: "flex" }}>
+            <Flex gap={16}>
               {headerLinks.map(({ title, path, icon }, idx) => (
                 <Link key={idx} href={path}>
-                  <Flex
-                    gap={6}
-                    align="center"
-                    ref={ref}
-                    style={{ opacity: hovered ? 0.8 : 1, transition: "0.3s" }}
-                  >
-                    <Flex align="center">{icon}</Flex>
-                    <Box fz="sm">{title}</Box>
-                  </Flex>
+                  <NavBarItem title={title} icon={icon} />
                 </Link>
               ))}
             </Flex>
-            <Flex
-              fz="sm"
-              gap={6}
-              align="center" style={{ cursor: "pointer" }} onClick={logout}
-            >
-              <MdLogout /><Box>ログアウト</Box>
-            </Flex>
+            <NavBarItem
+              title="ログアウト"
+              icon={<MdLogout />}
+              onClick={logout}
+            />
+          </Flex>
+          <Flex h="100%" align="center" display={{ base: "flex", md: "none" }}>
+            <NavDrawer />
           </Flex>
         </Flex>
       </Paper>

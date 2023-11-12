@@ -1,6 +1,6 @@
 "use client";
 import { Project } from "@/types";
-import { Box, Flex, Group, Progress, Select, Table, Text, Tooltip } from "@mantine/core";
+import { Badge, Box, Flex, Group, Progress, Select, Table, Text, Tooltip } from "@mantine/core";
 import { format } from "date-fns";
 import Link from "next/link";
 import React, { FC, useCallback, useEffect, useState } from "react";
@@ -24,7 +24,7 @@ const ProjectTableRow: FC<Props> = ({ project }) => {
       case "ORDER":
         return "別注";
       case "READY":
-        return "既製品";
+        return "既製";
       default:
         return "";
     }
@@ -93,13 +93,17 @@ const ProjectTableRow: FC<Props> = ({ project }) => {
 
   return (
     <Table.Tr >
-      <Table.Td>{project.createdAt &&
+      <Table.Td w={100}>{project.createdAt &&
         format(new Date(project?.createdAt.toDate()), "yyyy-MM-dd")}
       </Table.Td>
       <Table.Td>{project.title}</Table.Td>
       <Table.Td>{project.staff1}</Table.Td>
       <Table.Td>{project.staff2}</Table.Td>
-      <Table.Td>{OrderTypeLabel(project.orderType)}</Table.Td>
+      <Table.Td>
+        <Badge size='lg' color={project?.orderType === "ORDER" ? "teal" : "blue"}>
+          {OrderTypeLabel(project.orderType)}
+        </Badge>
+      </Table.Td>
       <Table.Td>{project.sales}万円</Table.Td>
       <Table.Td>{project.deadline}</Table.Td>
       <Table.Td>

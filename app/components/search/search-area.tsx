@@ -11,7 +11,7 @@ const SearchArea = () => {
     setSearchText(e.target.value);
   };
   return (
-    <Paper radius="md" shadow='sm' maw={500}>
+    <Paper radius="md" shadow='xs' maw={500}>
       <Flex mb="lg">
         <Input
           w="100%"

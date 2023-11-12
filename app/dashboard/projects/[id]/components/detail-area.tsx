@@ -69,7 +69,9 @@ const DtailArea: FC<Props> = ({ id }) => {
           {project?.createdAt && format(new Date(project?.createdAt.toDate()), "yyyy-MM-dd")}
         </Box>
         <Box>
-          <Badge size='lg' color={project?.orderType === "ORDER" ? "green" : "blue"}>{OrderTypeLabel(project?.orderType)}</Badge>
+          <Badge size='lg' color={project?.orderType === "ORDER" ? "teal" : "blue"}>
+            {OrderTypeLabel(project?.orderType)}
+          </Badge>
         </Box>
       </Flex>
       <Title order={2}>{project?.title}</Title>
@@ -108,7 +110,6 @@ const DtailArea: FC<Props> = ({ id }) => {
           </Box>
         </Flex>
       </Stack>
-      <Divider my="sm" />
       <DetailTodo project={project} />
     </Paper >
   );
