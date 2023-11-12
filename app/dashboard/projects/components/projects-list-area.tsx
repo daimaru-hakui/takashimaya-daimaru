@@ -1,12 +1,12 @@
 import { Paper, Title } from "@mantine/core";
 import React from "react";
-import ProjectTable from "./project-table";
+import ProjectsTable from "./projects-table";
 
 const ProjectListArea = () => {
   return (
-    <Paper w="100%" maw={1200} p={24} mx="auto" radius="md" shadow="md">
+    <Paper w="100%" maw={1300} p={24} mx="auto" radius="md" shadow="md">
       <Title order={2}>案件リスト</Title>
-      <ProjectTable />
+      <ProjectsTable />
     </Paper>
   );
 };

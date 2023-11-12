@@ -13,7 +13,7 @@ const NabBar: FC = () => {
     signOut();
   };
   return (
-    <Box component="header" w="100%" bg="white" pos="sticky" top={0}>
+    <Box component="header" w="100%" bg="white" pos="sticky" top={0} style={{ zIndex: 100 }}>
       <Paper shadow="xs">
         <Flex
           w="100%"
@@ -25,7 +25,7 @@ const NabBar: FC = () => {
           align="center"
         >
           <Link href="/dashboard">
-            <Box>髙島屋様ポータルサイト</Box>
+            <Box fw="bold">髙島屋様ポータルサイト</Box>
           </Link>
           <Flex gap={20}>
             <Flex gap={12}>

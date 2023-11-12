@@ -12,11 +12,14 @@ import {
   Title,
 } from "@mantine/core";
 import React, { FC } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import classes from "./NumberInput.module.css";
 import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase/client";
 import { format } from "date-fns";
+import { AiOutlineDelete } from "react-icons/ai";
+import { MdOutlineAddCircle } from "react-icons/md";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
   id: string;
@@ -29,6 +32,12 @@ type Inputs = {
   orderType: string;
   fileLink: string;
   comment: string;
+  todos: {
+    title: string;
+    isDone: boolean;
+  }[];
+  isCompleted: boolean;
+  deletedAt: null;
 };
 
 interface Props {
@@ -38,10 +47,26 @@ interface Props {
 }
 
 const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
-
-  const { register, handleSubmit, reset } = useForm<Inputs>({
+  const router = useRouter();
+  const { register, handleSubmit, reset, control } = useForm<Inputs>({
     defaultValues: defaultValues
   });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "todos",
+  });
+
+  const addTodo = () => {
+    append({
+      title: "",
+      isDone: false
+    });
+  };
+
+  const removeTodo = (idx: number) => {
+    remove(idx);
+  };
 
   const focusHandler = (e: React.FocusEvent<HTMLInputElement, Element>) => {
     e.target.select();
@@ -50,7 +75,9 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     switch (pageType) {
       case "NEW":
+        console.log(data);
         await createProject(data);
+        router.push("/dashboard");
         return;
       case "EDIT":
         await updateProject(data);
@@ -70,12 +97,14 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
         staff1: data.staff1 || "",
         staff2: data.staff2 || "",
         deadline: data.deadline || format(new Date(), "yyyy-MM-dd"),
-        createdAt: serverTimestamp(),
         comment: data.comment || "",
         status: "NEGOTIATION",
         orderType: data.orderType,
         fileLink: data.fileLink || "",
-        progress: 0
+        todos: data.todos || [],
+        isCompleted: false,
+        createdAt: serverTimestamp(),
+        deletedAt: null
       });
       reset();
     } catch (error) {
@@ -94,12 +123,14 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
         staff1: data.staff1 || "",
         staff2: data.staff2 || "",
         deadline: data.deadline || format(new Date(), "yyyy-MM-dd"),
-        updatedAt: serverTimestamp(),
         comment: data.comment || "",
         status: data.status,
         orderType: data.orderType,
         fileLink: data.fileLink,
-        progress: 0
+        todos: data.todos || [],
+        isCompleted: data.isCompleted,
+        deletedAt: data.deletedAt,
+        updatedAt: serverTimestamp(),
       });
     } catch (error) {
       console.error(error);
@@ -111,14 +142,22 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
       <Flex p={24} w="100%" direction="column">
         <Title order={2}>案件登録</Title>
         <Stack gap={24} mt={24}>
-          <TextInput label="案件名" {...register("title", { required: true })} />
+          <TextInput label="案件名" required {...register("title", { required: true })} />
           <Flex gap={12}>
             <TextInput label="担当者名1" {...register("staff1")} />
             <TextInput label="担当者名2" {...register("staff2")} />
           </Flex>
-          <Group>
-            <Radio label="既製品" value="READY" {...register("orderType")} />
-            <Radio label="別注品" value="ORDER" {...register("orderType")} />
+          <Group >
+            <Radio label="既製品"
+              defaultValue={defaultValues.orderType}
+              value="READY"
+              {...register("orderType")}
+            />
+            <Radio
+              label="別注品"
+              value="ORDER"
+              {...register("orderType")}
+            />
           </Group>
           <Box>
             <Text fz="sm">売上規模</Text>
@@ -136,9 +175,32 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
             label="納期"
             {...register("deadline")}
           />
-          <TextInput label="ファイルリンク" {...register("fileLink")} />
-          <Textarea {...register("comment")}></Textarea>
-          <Button type="submit" fullWidth>{pageType === "NEW" ? "登録" : "更新"}</Button>
+          <TextInput label="共有フォルダーリンク" placeholder="/path" {...register("fileLink")} />
+          <Stack gap={6}>
+            <Box fz="sm">進捗リスト項目</Box>
+            {fields.map((field, idx) => (
+              <Flex key={field.id} align="center" justify="space-between" gap={12}>
+                <TextInput w="100%" {...register(`todos.${idx}.title`)} />
+                <AiOutlineDelete
+                  style={{ cursor: "pointer", fontSize: 20 }}
+                  onClick={() => removeTodo(idx)}
+                />
+              </Flex>
+            ))}
+            <Button
+              variant="outline"
+              p={3} w="50px"
+              onClick={addTodo}
+            >
+              <MdOutlineAddCircle
+                style={{ cursor: "pointer", fontSize: 20 }}
+              />
+            </Button>
+          </Stack>
+          {/* <Textarea {...register("comment")}></Textarea> */}
+          <Button type="submit" fullWidth>
+            {pageType === "NEW" ? "登録" : "更新"}
+          </Button>
         </Stack>
       </Flex>
     </form>

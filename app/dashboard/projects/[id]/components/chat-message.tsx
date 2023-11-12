@@ -30,7 +30,7 @@ const ChatMessage: FC<Props> = ({ message, id }) => {
   return (
     <Box
       w="95%"
-      mt={24}
+      mb={24}
     >
       <Flex align="center" justify="space-between" gap={12}>
         <Flex align="center" gap={12}>

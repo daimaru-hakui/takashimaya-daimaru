@@ -7,9 +7,15 @@ export type Project = {
   sales: number;
   comment: string;
   progress: number;
-  status: "NEGOTIATION" | "QUOTATION"
+  status: "NEGOTIATION" | "QUOTATION";
   orderType: string;
-  fileLink:string;
+  fileLink: string;
+  todos: {
+    title: string;
+    isDone: boolean;
+  }[];
+  isCompleted: boolean;
+  deletedAt: any;
   createdAt: any;
 };
 

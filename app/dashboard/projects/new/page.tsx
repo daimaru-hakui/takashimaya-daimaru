@@ -14,9 +14,12 @@ const ProjectNew = () => {
     deadline: format(new Date(), "yyyy-MM-dd"),
     sales: 0,
     status: "NEGOTIATION",
-    orderType: "",
+    orderType: "READY",
     fileLink: "",
-    comment: ""
+    comment: "",
+    todos: [],
+    isCompleted: false,
+    deletedAt: null
   };
   return (
     <Paper shadow="md" radius="md" w={400} mx="auto">

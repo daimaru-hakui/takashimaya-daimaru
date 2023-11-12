@@ -1,8 +1,14 @@
 import React from "react";
-import ProjectListArea from "../components/dashboard/project-list-area";
+import ProjectsListArea from "./projects/components/projects-list-area";
+import SearchArea from "../components/search/search-area";
 
 const DashboardPage = () => {
-  return <ProjectListArea />;
+  return (
+    <>
+      <SearchArea />
+      <ProjectsListArea />
+    </>
+  );
 };
 
 export default DashboardPage;

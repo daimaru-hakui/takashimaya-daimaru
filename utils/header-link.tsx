@@ -6,6 +6,11 @@ export const headerLinks = [
     icon: <AiOutlineUnorderedList />,
   },
   {
+    title: "終了案件",
+    path: "/dashboard/closed-projects",
+    icon: <AiOutlineUnorderedList />,
+  },
+  {
     title: "案件登録",
     path: "/dashboard/projects/new",
     icon: <AiOutlineFileAdd />,

@@ -9,7 +9,7 @@ interface Props {
   project: Project;
 }
 
-const ProjectEditModal: FC<Props> = ({ project }) => {
+const ProjectsEditModal: FC<Props> = ({ project }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const defaultValues = {
     ...project
@@ -23,7 +23,8 @@ const ProjectEditModal: FC<Props> = ({ project }) => {
         style={{ cursor: "pointer", fontSize: 24 }}
         onClick={open}
       />
-    </>);
+    </>
+  );
 };
 
-export default ProjectEditModal;
+export default ProjectsEditModal;

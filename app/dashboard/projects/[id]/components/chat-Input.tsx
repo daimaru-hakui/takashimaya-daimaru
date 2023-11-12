@@ -1,21 +1,23 @@
 import { db } from '@/firebase/client';
 import { Message } from '@/types';
 import { Button, Flex, Textarea } from '@mantine/core';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, getCountFromServer, query, serverTimestamp, where } from 'firebase/firestore';
 import { useSession } from 'next-auth/react';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 
 interface Props {
   id: string;
+  messageCount: number;
 }
 
 type Inputs = {
   content: string;
 };
 
-const ChatInput: FC<Props> = ({ id }) => {
+const ChatInput: FC<Props> = ({ id, messageCount }) => {
   const session = useSession();
+
   const [content, setContent] = useState("");
   const {
     register,
@@ -39,13 +41,13 @@ const ChatInput: FC<Props> = ({ id }) => {
     });
     setContent("");
   };
+
   return (
     <Flex
       w="100%"
-      h="100px"
       maw={600}
-      pos="fixed"
-      bottom={0}
+      pos="absolute"
+      bottom={messageCount > 0 ? 0 : ""}
       align="center"
     >
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
