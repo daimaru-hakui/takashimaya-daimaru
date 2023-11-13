@@ -12,6 +12,10 @@ export const statusList = [
     label: "決定"
   },
   {
+    value: "CLAIM",
+    label: "クレーム"
+  },
+  {
     value: "REJECTED",
     label: "没"
   },
