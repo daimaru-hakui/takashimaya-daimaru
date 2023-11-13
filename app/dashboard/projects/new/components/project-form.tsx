@@ -8,7 +8,6 @@ import {
   Stack,
   Text,
   TextInput,
-  Textarea,
   Title,
 } from "@mantine/core";
 import React, { FC } from "react";
@@ -96,7 +95,7 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
         sales: Number(data.sales),
         staff1: data.staff1 || "",
         staff2: data.staff2 || "",
-        deadline: data.deadline || format(new Date(), "yyyy-MM-dd"),
+        deadline: data.deadline || "未定",
         comment: data.comment || "",
         status: "NEGOTIATION",
         orderType: data.orderType,
@@ -122,7 +121,7 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
         sales: Number(data.sales),
         staff1: data.staff1 || "",
         staff2: data.staff2 || "",
-        deadline: data.deadline || format(new Date(), "yyyy-MM-dd"),
+        deadline: data.deadline || "未定",
         comment: data.comment || "",
         status: data.status,
         orderType: data.orderType,
