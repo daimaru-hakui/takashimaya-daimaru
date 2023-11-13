@@ -10,14 +10,19 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import classes from "./NumberInput.module.css";
-import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "@/firebase/client";
-import { format } from "date-fns";
 import { AiOutlineDelete } from "react-icons/ai";
-import { MdOutlineAddCircle } from "react-icons/md";
+import { MdOutlineAddCircle,MdDragIndicator } from "react-icons/md";
 import { useRouter } from "next/navigation";
 
 type Inputs = {
@@ -47,9 +52,11 @@ interface Props {
 
 const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
   const router = useRouter();
-  const { register, handleSubmit, reset, control } = useForm<Inputs>({
-    defaultValues: defaultValues
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const methods = useForm<Inputs>({
+    defaultValues: defaultValues,
   });
+  const { register, handleSubmit, reset, control, watch, setValue } = methods;
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -59,7 +66,7 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
   const addTodo = () => {
     append({
       title: "",
-      isDone: false
+      isDone: false,
     });
   };
 
@@ -97,18 +104,44 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
         staff2: data.staff2 || "",
         deadline: data.deadline || "未定",
         comment: data.comment || "",
-        status: "NEGOTIATION",
+        status: "",
         orderType: data.orderType,
         fileLink: data.fileLink || "",
         todos: data.todos || [],
         isCompleted: false,
         createdAt: serverTimestamp(),
-        deletedAt: null
+        deletedAt: null,
       });
       reset();
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const onDragStart = (idx: number) => {
+    setDragIndex(idx);
+  };
+
+  const onDragEnter = (idx: number) => {
+    if (dragIndex === idx) return;
+    if (dragIndex === null) return;
+    const array = watch("todos");
+    const deleteIndex = array.splice(dragIndex, 1)[0];
+    array.splice(idx, 0, deleteIndex);
+    setValue("todos", array);
+    setDragIndex(idx);
+  };
+
+  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const onDragEnd = () => {
+    setDragIndex(null);
   };
 
   const updateProject = async (data: Inputs) => {
@@ -153,22 +186,23 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
       <Flex p={24} w="100%" direction="column">
         <Title order={2}>案件登録</Title>
         <Stack gap={24} mt={24}>
-          <TextInput label="案件名" required {...register("title", { required: true })} />
+          <TextInput
+            label="案件名"
+            required
+            {...register("title", { required: true })}
+          />
           <Flex gap={12}>
             <TextInput label="担当者名1" {...register("staff1")} />
             <TextInput label="担当者名2" {...register("staff2")} />
           </Flex>
-          <Group >
-            <Radio label="既製品"
+          <Group>
+            <Radio
+              label="既製品"
               defaultValue={defaultValues.orderType}
               value="READY"
               {...register("orderType")}
             />
-            <Radio
-              label="別注品"
-              value="ORDER"
-              {...register("orderType")}
-            />
+            <Radio label="別注品" value="ORDER" {...register("orderType")} />
           </Group>
           <Box>
             <Text fz="sm">売上規模（万円）</Text>
@@ -186,14 +220,31 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
             label="納期"
             {...register("deadline")}
           />
-          <TextInput label="共有フォルダーリンク" placeholder="/path" {...register("fileLink")} />
-          <Stack gap={6}>
+          <TextInput
+            label="共有フォルダーリンク"
+            placeholder="/path"
+            {...register("fileLink")}
+          />
+          <Stack gap={6} >
             <Box fz="sm">進捗リスト項目</Box>
             {fields.map((field, idx) => (
-              <Flex key={field.id} align="center" justify="space-between" gap={12}>
+              <Flex
+                key={field.id}
+                align="center"
+                justify="space-between"
+                gap={12}
+                draggable={true}
+                onDragStart={() => onDragStart(idx)}
+                onDragEnter={() => onDragEnter(idx)}
+                onDragLeave={(e) => onDragLeave(e)}
+                onDragOver={(e) => onDragOver(e)}
+                onDragEnd={() => onDragEnd()}
+              >
+              <MdDragIndicator style={{cursor:"pointer"}}/>
                 <TextInput
                   w="100%"
-                  {...register(`todos.${idx}.title`, { required: true })} required
+                  {...register(`todos.${idx}.title`, { required: true })}
+                  required
                 />
                 <AiOutlineDelete
                   style={{ cursor: "pointer", fontSize: 20 }}
@@ -201,14 +252,8 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
                 />
               </Flex>
             ))}
-            <Button
-              variant="outline"
-              p={3} w="50px"
-              onClick={addTodo}
-            >
-              <MdOutlineAddCircle
-                style={{ cursor: "pointer", fontSize: 20 }}
-              />
+            <Button variant="outline" p={3} w="50px" onClick={addTodo}>
+              <MdOutlineAddCircle style={{ cursor: "pointer", fontSize: 20 }} />
             </Button>
           </Stack>
           {/* <Textarea {...register("comment")}></Textarea> */}
