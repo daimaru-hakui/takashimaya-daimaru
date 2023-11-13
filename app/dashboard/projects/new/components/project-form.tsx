@@ -35,7 +35,6 @@ type Inputs = {
   status: string;
   orderType: string;
   fileLink: string;
-  comment: string;
   todos: {
     title: string;
     isDone: boolean;
@@ -103,7 +102,6 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
         staff1: data.staff1 || "",
         staff2: data.staff2 || "",
         deadline: data.deadline || "未定",
-        comment: data.comment || "",
         status: "",
         orderType: data.orderType,
         fileLink: data.fileLink || "",
@@ -155,7 +153,6 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
         staff1: data.staff1 || "",
         staff2: data.staff2 || "",
         deadline: data.deadline || "未定",
-        comment: data.comment || "",
         status: data.status,
         orderType: data.orderType,
         fileLink: data.fileLink,
@@ -198,7 +195,6 @@ const ProjectForm: FC<Props> = ({ defaultValues, pageType, close }) => {
           <Group>
             <Radio
               label="既製品"
-              defaultValue={defaultValues.orderType}
               value="READY"
               {...register("orderType")}
             />

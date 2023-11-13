@@ -5,7 +5,6 @@ export type Project = {
   staff2: string;
   deadline: string;
   sales: number;
-  comment: string;
   progress: number;
   status: "NEGOTIATION" | "QUOTATION";
   orderType: string;

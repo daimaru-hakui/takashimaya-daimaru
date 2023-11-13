@@ -1,9 +1,10 @@
-import { Box, Switch } from '@mantine/core';
-import React, { FC } from 'react';
+import { useStore } from "@/store";
+import { Box, Switch } from "@mantine/core";
+import React, { FC } from "react";
 
 interface Props {
   todo: {
-    title: string,
+    title: string;
     isDone: boolean;
   };
   idx: number;
@@ -11,12 +12,13 @@ interface Props {
 }
 
 const DetailTodosRow: FC<Props> = ({ todo, HandleSelectChange, idx }) => {
-
+  const currentUser = useStore((state) => state.currentUser);
   return (
-    <Box >
+    <Box>
       <Switch
         defaultChecked={todo.isDone}
         label={todo.title}
+        style={{ pointerEvents: currentUser?.isEditor ? "all" : "none" }}
         onChange={() => HandleSelectChange(todo.isDone, idx)}
       />
     </Box>
