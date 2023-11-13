@@ -3,32 +3,16 @@ import { headerLinks } from "@/utils/header-link";
 import { Box, Flex, Paper } from "@mantine/core";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import { MdLogout } from "react-icons/md";
 import NavBarItem from "./nav-bar-item";
 import NavDrawer from "./nav-drawer";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "@/firebase/client";
-import { CurrentUser, useStore } from "@/store";
 
 const NabBar: FC = () => {
-  const setCurrentUser = useStore((state) => state.setCurrentUser);
-
-  useEffect(() => {
-    const getUser = async () => {
-      const uid = auth.currentUser?.uid || "";
-      const docRef = doc(db, "users", uid);
-      const docSnap = await getDoc(docRef);
-      if (!docSnap.exists) return;
-      setCurrentUser({ ...docSnap.data(), id: docSnap.id } as CurrentUser);
-    };
-    getUser();
-  }, [setCurrentUser]);
 
   const logout = () => {
     signOut();
   };
-  
 
   return (
     <Box
