@@ -46,13 +46,13 @@ const ProjectTable = () => {
       <Table mt={24} w="100%" miw={1200}>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th w={100}>登録日</Table.Th>
+            <Table.Th w={110}>登録日</Table.Th>
             <Table.Th w={200}>案件名</Table.Th>
             <Table.Th w={100}>担当者名</Table.Th>
             <Table.Th w={100}>担当者名</Table.Th>
             <Table.Th w={100}>種別</Table.Th>
             <Table.Th w={100}>売上規模</Table.Th>
-            <Table.Th w={100}>納期</Table.Th>
+            <Table.Th w={110}>納期</Table.Th>
             <Table.Th w={100}>進捗率</Table.Th>
             <Table.Th>ステータス</Table.Th>
             <Table.Th>アクション</Table.Th>
