@@ -28,6 +28,7 @@ const NabBar: FC = () => {
   const logout = () => {
     signOut();
   };
+  
 
   return (
     <Box
