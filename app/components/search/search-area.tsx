@@ -1,7 +1,7 @@
 "use client";
-import { useStore } from '@/store';
-import { CloseButton, Flex, Input, Paper } from '@mantine/core';
-import React from 'react';
+import { useStore } from "@/store";
+import { CloseButton, Flex, Input, Paper } from "@mantine/core";
+import React from "react";
 import { BiSearch } from "react-icons/bi";
 
 const SearchArea = () => {
@@ -11,7 +11,7 @@ const SearchArea = () => {
     setSearchText(e.target.value);
   };
   return (
-    <Paper radius="md" shadow='xs' maw={500}>
+    <Paper radius="md" shadow="xs" w="100%" maw={500}>
       <Flex mb="lg">
         <Input
           w="100%"
@@ -22,8 +22,8 @@ const SearchArea = () => {
           rightSection={
             <CloseButton
               aria-label="Clear input"
-              onClick={() => setSearchText('')}
-              style={{ display: searchText ? undefined : 'none' }}
+              onClick={() => setSearchText("")}
+              style={{ display: searchText ? undefined : "none" }}
             />
           }
           rightSectionPointerEvents="all"

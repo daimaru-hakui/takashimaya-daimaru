@@ -1,14 +1,24 @@
 "use client";
 import { Box, Flex } from "@mantine/core";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import NabBar from "../components/nav/nav-bar";
 import { CurrentUser, useStore } from "@/store";
 import { auth, db } from "@/firebase/client";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
+import { type Project } from "@/types";
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
   const setCurrentUser = useStore((state) => state.setCurrentUser);
+  const setProjects = useStore((state) => state.setProjects);
 
   onAuthStateChanged(auth, async (session) => {
     if (session) {
@@ -20,6 +30,24 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
       setCurrentUser(null);
     }
   });
+
+  useEffect(() => {
+    const getProjects = async () => {
+      const docsRef = collection(db, "projects");
+      const q = query(
+        docsRef,
+        where("deletedAt", "==", null),
+        where("isCompleted", "==", false),
+        orderBy("createdAt", "desc")
+      );
+      onSnapshot(q, (snapshot) => {
+        setProjects(
+          snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Project))
+        );
+      });
+    };
+    getProjects();
+  }, [setProjects]);
 
   return (
     <Flex w="100%" mih="100vh" direction="column" bg="#f4f4f4">

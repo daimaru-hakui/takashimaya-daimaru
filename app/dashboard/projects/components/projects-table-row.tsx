@@ -25,7 +25,7 @@ const ProjectTableRow: FC<Props> = ({ project }) => {
   const [progressRate, setProgressRate] = useState(0);
   const currentUser = useStore((state) => state.currentUser);
   const [status, setStatus] = useState("");
-  console.log(currentUser)
+  // console.log(currentUser)
 
   const OrderTypeLabel = (orderType: string) => {
     switch (orderType) {

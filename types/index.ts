@@ -6,7 +6,7 @@ export type Project = {
   deadline: string;
   sales: number;
   progress: number;
-  status: "NEGOTIATION" | "QUOTATION";
+  status: "PROGRESS" | "PENDING" | "DECIDED" | "NEGOTIATION" |"CLAIM"| "REJECTED";
   orderType: string;
   fileLink: string;
   todos: {
@@ -18,11 +18,10 @@ export type Project = {
   createdAt: any;
 };
 
-
 export type Message = {
   id: string;
   content: string;
-  email: string,
+  email: string;
   author: string;
   createdAt: any;
 };

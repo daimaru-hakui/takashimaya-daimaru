@@ -1,45 +1,25 @@
 "use client";
 import { Box, Table } from "@mantine/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ProjectsTableRow from "./projects-table-row";
-import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
-import { db } from "@/firebase/client";
-import { Project } from "@/types";
 import { useStore } from "@/store";
 
 const ProjectTable = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [filterProjects, setFilterProjects] = useState<Project[]>(projects);
+  const projects = useStore((state) => state.projects);
   const searchText = useStore((state) => state.searchText);
-
-  useEffect(() => {
-    const getProjects = async () => {
-      const docsRef = collection(db, "projects");
-      const q = query(
-        docsRef,
-        where("deletedAt", "==", null),
-        where("isCompleted", "==", false),
-        orderBy("createdAt", "desc")
-      );
-      onSnapshot(q, (snapshot) => {
-        setProjects(snapshot.docs.map((doc) => (
-          { ...doc.data(), id: doc.id } as Project
-        )));
-      });
-    };
-    getProjects();
-  }, []);
+  const filterProjects = useStore((state) => state.filterProjects);
+  const setFilterProjects = useStore((state) => state.setFilterProjects);
 
   useEffect(() => {
     const clear = setTimeout(() => {
-      setFilterProjects(projects.filter((project) => (
-        project.title.includes(searchText)
-      )));
+      setFilterProjects(
+        projects.filter((project) => project.title.includes(searchText))
+      );
     }, 500);
     return () => {
       clearTimeout(clear);
     };
-  }, [projects, searchText]);
+  }, [projects, searchText, setFilterProjects]);
 
   return (
     <Box style={{ overflow: "auto" }}>
