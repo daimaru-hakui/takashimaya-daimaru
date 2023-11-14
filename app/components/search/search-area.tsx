@@ -1,36 +1,19 @@
 "use client";
-import { useStore } from "@/store";
-import { CloseButton, Flex, Input, Paper } from "@mantine/core";
+import {Flex,  Paper } from "@mantine/core";
 import React from "react";
-import { BiSearch } from "react-icons/bi";
+import SearchDrawer from "./search-drawer";
+import SearchTitleInput from "./search-title-input";
 
 const SearchArea = () => {
-  const searchText = useStore((state) => state.searchText);
-  const setSearchText = useStore((state) => state.setSearchText);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
-  };
+
+
   return (
-    <Paper radius="md" shadow="xs" w="100%" maw={500}>
-      <Flex mb="lg">
-        <Input
-          w="100%"
-          radius="md"
-          placeholder="Search"
-          value={searchText}
-          leftSection={<BiSearch size={16} />}
-          rightSection={
-            <CloseButton
-              aria-label="Clear input"
-              onClick={() => setSearchText("")}
-              style={{ display: searchText ? undefined : "none" }}
-            />
-          }
-          rightSectionPointerEvents="all"
-          onChange={handleChange}
-        />
-      </Flex>
-    </Paper>
+    <Flex mb="lg" justify="space-between">
+      <Paper radius="md" shadow="xs" w="100%" maw={500}>
+        <SearchTitleInput/>
+      </Paper>
+      <SearchDrawer />
+    </Flex>
   );
 };
 export default SearchArea;

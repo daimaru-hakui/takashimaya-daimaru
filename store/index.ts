@@ -11,6 +11,14 @@ export type CurrentUser = {
 type useState = {
   searchText: string;
   setSearchText: (payload: string) => void;
+  searchStaff: string;
+  setSearchStaff: (payload: string) => void;
+  startAt: string;
+  setStartAt: (payload: string) => void;
+  endAt: string;
+  setEndAt: (payload: string) => void;
+  searchStatus: string;
+  setSearchStatus: (payload: string) => void;
   currentUser: CurrentUser;
   setCurrentUser: (payload: CurrentUser) => void;
   projects: Project[];
@@ -21,7 +29,15 @@ type useState = {
 
 export const useStore = create<useState>((set) => ({
   searchText: "",
-  setSearchText: (searchText) => set({ searchText: searchText }),
+  setSearchText: (searchText) => set({ searchText }),
+  searchStaff: "",
+  setSearchStaff: (searchStaff) => set({ searchStaff }),
+  startAt: "",
+  setStartAt: (startAt) => set({ startAt }),
+  endAt: "",
+  setEndAt: (endAt) => set({ endAt }),
+  searchStatus: "",
+  setSearchStatus: (searchStatus: string) => set({ searchStatus }),
   currentUser: null,
   setCurrentUser: (currentUser) => set({ currentUser }),
   projects: [],
