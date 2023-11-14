@@ -124,7 +124,7 @@ const ProjectTableRow: FC<Props> = ({ project }) => {
           {OrderTypeLabel(project.orderType)}
         </Badge>
       </Table.Td>
-      <Table.Td>{project.sales}万円</Table.Td>
+      <Table.Td style={{textAlign:"right"}} pr={30}>{project.sales.toLocaleString()}万</Table.Td>
       <Table.Td>{project.deadline}</Table.Td>
       <Table.Td>
         <Text fz="xs">{progressRate}%</Text>
