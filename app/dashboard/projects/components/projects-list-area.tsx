@@ -8,7 +8,7 @@ import { useStore } from "@/store";
 const ProjectListArea = () => {
   const currentUser = useStore((state) => state.currentUser);
   return (
-    <Paper w="100%" maw={1300} p="lg" mt="md" mx="auto" radius="md" shadow="md">
+    <Paper w="100%" maw={1300} p="lg" mt="lg" mx="auto" radius="md" shadow="md">
       <Flex justify="space-between">
         <Title order={2}>案件リスト</Title>
         {currentUser?.isEditor && (
