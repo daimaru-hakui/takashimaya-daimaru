@@ -25,13 +25,10 @@ const SearchDrawer = () => {
   const setEndAt = useStore((state) => state.setEndAt);
   const searchStatus = useStore((state) => state.searchStatus);
   const setSearchStatus = useStore((state) => state.setSearchStatus);
+  const resetSearch = useStore((state) => state.resetSearch);
 
   const reset = () => {
-    setSearchText("");
-    setSearchStaff("");
-    setStartAt("");
-    setEndAt("");
-    setSearchStatus("");
+    resetSearch()
   };
 
   return (

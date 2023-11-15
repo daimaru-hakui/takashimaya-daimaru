@@ -43,6 +43,7 @@ const LoginForm = () => {
 
     } catch (error) {
       console.log("error");
+      alert("ログインに失敗しました")
       console.error(error);
     }
   };

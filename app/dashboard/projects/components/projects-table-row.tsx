@@ -114,8 +114,8 @@ const ProjectTableRow: FC<Props> = ({ project }) => {
           format(new Date(project?.createdAt.toDate()), "yyyy-MM-dd")}
       </Table.Td>
       <Table.Td>{project.title}</Table.Td>
-      <Table.Td>{project.staff1}</Table.Td>
-      <Table.Td>{project.staff2}</Table.Td>
+      <Table.Td>{project.staff1}{project.staff1 && "様"}</Table.Td>
+      <Table.Td>{project.staff2}{project.staff2 && "様"}</Table.Td>
       <Table.Td>
         <Badge
           size="lg"
