@@ -1,8 +1,8 @@
 "use client";
 import { db } from '@/firebase/client';
-import { Message } from '@/types';
+import { Message, Project } from '@/types';
 import { Flex, } from '@mantine/core';
-import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { collection, doc, getDoc, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import React, { FC, useEffect, useState } from 'react';
 import ChatMessage from './chat-message';
 import ChatInput from './chat-Input';
@@ -13,6 +13,7 @@ interface Props {
 
 const ChatArea: FC<Props> = ({ id }) => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [project, setProject] = useState<Project>();
 
   useEffect(() => {
     const getMessages = async () => {
@@ -25,6 +26,18 @@ const ChatArea: FC<Props> = ({ id }) => {
       });
     };
     getMessages();
+  }, [id]);
+
+  useEffect(() => {
+    const getProject = async () => {
+      const docRef = doc(db, "projects", `${id}`);
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists()) return;
+      onSnapshot(docRef, (snapshot) => {
+        setProject({ ...snapshot.data(), id: snapshot.id } as Project);
+      });
+    };
+    getProject();
   }, [id]);
 
   return (
@@ -45,7 +58,7 @@ const ChatArea: FC<Props> = ({ id }) => {
           <ChatMessage key={message.id} message={message} id={id} />
         ))}
       </Flex>
-      <ChatInput id={id} messageCount={messages?.length} />
+      <ChatInput id={id} messageCount={messages?.length} project={project} />
     </Flex>
   );
 };

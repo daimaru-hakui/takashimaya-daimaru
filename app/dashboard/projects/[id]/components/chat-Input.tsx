@@ -1,21 +1,24 @@
+"use client";
 import { db } from '@/firebase/client';
-import { Message } from '@/types';
 import { Button, Flex, Textarea } from '@mantine/core';
-import { addDoc, collection, getCountFromServer, query, serverTimestamp, where } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { useSession } from 'next-auth/react';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
+import emailjs from '@emailjs/browser';
+import { Project } from '@/types';
 
 interface Props {
   id: string;
   messageCount: number;
+  project: Project | undefined;
 }
 
 type Inputs = {
   content: string;
 };
 
-const ChatInput: FC<Props> = ({ id, messageCount }) => {
+const ChatInput: FC<Props> = ({ id, messageCount, project }) => {
   const session = useSession();
 
   const [content, setContent] = useState("");
@@ -26,6 +29,7 @@ const ChatInput: FC<Props> = ({ id, messageCount }) => {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    sendEmail(data);
     createMessage(data);
     reset();
   };
@@ -37,9 +41,33 @@ const ChatInput: FC<Props> = ({ id, messageCount }) => {
       author: session.data?.user.uid,
       email: session.data?.user.email,
       createdAt: serverTimestamp(),
-      deletedAt: null
+      deletedAt: null,
+      read: []
     });
     setContent("");
+  };
+
+  const sendEmail = async (data: Inputs) => {
+    const emails = ["mukaibook@gmail.com", "dh.mukai.dh@gmail.com"];
+    for (let email of emails) {
+      const template_params = {
+        user_email: email,
+        title: project?.title,
+        content: data.content,
+        link: location.href
+      };
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID as string,
+        template_params,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+      )
+        .then((result) => {
+          console.log(result.text);
+        }, (error) => {
+          console.log(error.text);
+        });
+    }
   };
 
   return (

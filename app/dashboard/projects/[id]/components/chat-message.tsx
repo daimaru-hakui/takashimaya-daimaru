@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 import { useSession } from 'next-auth/react';
 import { Message } from '@/types';
 import { format } from 'date-fns';
-import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase/client';
 import ChatEdit from './chat-edit';
