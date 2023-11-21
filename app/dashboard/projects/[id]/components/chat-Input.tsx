@@ -48,7 +48,7 @@ const ChatInput: FC<Props> = ({ id, messageCount, project }) => {
   };
 
   const sendEmail = async (data: Inputs) => {
-    const emails = ["mukaibook@gmail.com", "dh.mukai.dh@gmail.com"];
+    const emails = ["youhei-ikeda@daimaru-hakui.co.jp", "mukai@daimaru-hakui.co.jp"];
     for (let email of emails) {
       const template_params = {
         user_email: email,
