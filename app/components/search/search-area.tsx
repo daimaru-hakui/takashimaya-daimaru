@@ -1,16 +1,19 @@
 "use client";
 import { Button, Flex, Paper } from "@mantine/core";
-import React from "react";
+import React, { FC } from "react";
 import SearchDrawer from "./search-drawer";
 import SearchTitleInput from "./search-title-input";
-import { useStore } from "@/store";
+import { Project } from "@/types";
 
-const SearchArea = () => {
-  const projects = useStore((state) => state.projects);
-  const filterProjects = useStore((state) => state.filterProjects);
-  const resetSearch = useStore((state) => state.resetSearch);
+interface Props {
+  projects: Project[];
+  filterProjects: Project[];
+  resetSearch: () => void;
+}
+
+const SearchArea: FC<Props> = ({ projects, filterProjects, resetSearch }) => {
   const reset = () => {
-    resetSearch()
+    resetSearch();
   };
   return (
     <Flex mb="lg" justify="space-between" gap="lg">

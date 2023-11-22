@@ -26,6 +26,8 @@ type useState = {
   setProjects: (payload: Project[]) => void;
   filterProjects: Project[];
   setFilterProjects: (payload: Project[]) => void;
+  filterClosedProjects: Project[];
+  setFilterClosedProjects: (payload: Project[]) => void;
 };
 
 export const useStore = create<useState>((set) => ({
@@ -53,4 +55,7 @@ export const useStore = create<useState>((set) => ({
   setProjects: (projects) => set({ projects }),
   filterProjects: [],
   setFilterProjects: (filterProjects) => set({ filterProjects }),
+  filterClosedProjects: [],
+  setFilterClosedProjects: (filterClosedProjects) =>
+    set({ filterClosedProjects }),
 }));

@@ -9,7 +9,9 @@ import { useStore } from "@/store";
 import ProgressStatus from "@/app/components/stats/progress-status";
 
 const ProjectsHeaderArea = () => {
+  const projects = useStore((state) => state.projects);
   const filterProjects = useStore((state) => state.filterProjects);
+  const resetSearch = useStore((state) => state.resetSearch);
   const newProjects = filterProjects.map((project) => ({
     sales: project.sales,
   }));
@@ -20,8 +22,17 @@ const ProjectsHeaderArea = () => {
 
   return (
     <>
-      <SearchArea />
-      <Flex w="100%" direction={{base:"column" , md:"row"}} justify="space-between" gap="lg">
+      <SearchArea
+        projects={projects}
+        filterProjects={filterProjects}
+        resetSearch={resetSearch}
+      />
+      <Flex
+        w="100%"
+        direction={{ base: "column", md: "row" }}
+        justify="space-between"
+        gap="lg"
+      >
         <Stats
           title="総案件数"
           value={filterProjects.length}

@@ -1,12 +1,11 @@
 import React from 'react';
-import ClosedProjectTable from './components/close-projects-table';
 import ClosedProjectListArea from './components/closed-projects-list-area';
-import SearchArea from '@/app/components/search/search-area';
+import ClosedProjectsHeaderArea from './components/closed-projects-header-area';
 
 const CloseProjectAll = () => {
   return (
     <>
-      <SearchArea />
+      <ClosedProjectsHeaderArea/>
       <ClosedProjectListArea />
     </>
   );

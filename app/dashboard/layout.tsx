@@ -17,6 +17,7 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { type Project } from "@/types";
 import { useSession } from "next-auth/react";
+import { format } from "date-fns";
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
   const setCurrentUser = useStore((state) => state.setCurrentUser);
@@ -45,7 +46,17 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
       );
       onSnapshot(q, (snapshot) => {
         setProjects(
-          snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Project))
+          snapshot.docs.map(
+            (doc) =>
+              ({
+                ...doc.data(),
+                id: doc.id,
+                createdAt: format(
+                  new Date(doc.data().createdAt.toDate()),
+                  "yyyy-MM-dd"
+                ),
+              } as Project)
+          )
         );
       });
     };
@@ -54,7 +65,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
 
   useEffect(() => {
     if (session) {
-      if(!session.data?.user.email) return
+      if (!session.data?.user.email) return;
       const docRef = doc(db, "users", `${session.data?.user.uid}`);
       const addAuthority = async () => {
         const docSnap = await getDoc(docRef);

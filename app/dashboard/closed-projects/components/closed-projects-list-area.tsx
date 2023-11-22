@@ -1,6 +1,6 @@
 import { Paper, Title } from "@mantine/core";
 import React from "react";
-import ClosedProjectTable from "./close-projects-table";
+import ClosedProjectTable from "./closed-projects-table";
 
 const ClosedProjectListArea = () => {
   return (

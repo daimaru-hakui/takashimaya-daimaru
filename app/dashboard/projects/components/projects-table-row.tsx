@@ -110,8 +110,7 @@ const ProjectTableRow: FC<Props> = ({ project }) => {
   return (
     <Table.Tr>
       <Table.Td w={100}>
-        {project.createdAt &&
-          format(new Date(project?.createdAt.toDate()), "yyyy-MM-dd")}
+        {project.createdAt}
       </Table.Td>
       <Table.Td>{project.title}</Table.Td>
       <Table.Td>{project.staff1}{project.staff1 && "様"}</Table.Td>
