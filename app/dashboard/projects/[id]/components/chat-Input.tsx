@@ -1,12 +1,17 @@
 "use client";
-import { db } from '@/firebase/client';
-import { Button, Flex, Textarea } from '@mantine/core';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { useSession } from 'next-auth/react';
-import React, { FC, useState } from 'react';
+import { db } from "@/firebase/client";
+import { Button, Flex, Textarea } from "@mantine/core";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  serverTimestamp,
+} from "firebase/firestore";
+import { useSession } from "next-auth/react";
+import React, { FC, useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import emailjs from '@emailjs/browser';
-import { Project } from '@/types';
+import emailjs from "@emailjs/browser";
+import { Project } from "@/types";
 
 interface Props {
   id: string;
@@ -20,6 +25,24 @@ type Inputs = {
 
 const ChatInput: FC<Props> = ({ id, messageCount, project }) => {
   const session = useSession();
+  const [emails, setEmails] = useState<string[]>([]);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      const coll = collection(db, "users");
+      const snapSHot = await getDocs(coll);
+      const object: any = snapSHot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      let array: string[] = [];
+      object.forEach((doc: any) => {
+        array.push(doc.email);
+      });
+      setEmails(array)
+    };
+    getUsers();
+  }, []);
 
   const [content, setContent] = useState("");
   const {
@@ -42,31 +65,34 @@ const ChatInput: FC<Props> = ({ id, messageCount, project }) => {
       email: session.data?.user.email,
       createdAt: serverTimestamp(),
       deletedAt: null,
-      read: []
+      read: [],
     });
     setContent("");
   };
 
   const sendEmail = async (data: Inputs) => {
-    const emails = ["youhei-ikeda@daimaru-hakui.co.jp", "mukai@daimaru-hakui.co.jp"];
     for (let email of emails) {
       const template_params = {
         user_email: email,
         title: project?.title,
         content: data.content,
-        link: location.href
+        link: location.href,
       };
-      await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID as string,
-        template_params,
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-      )
-        .then((result) => {
-          console.log(result.text);
-        }, (error) => {
-          console.log(error.text);
-        });
+      await emailjs
+        .send(
+          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string,
+          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID as string,
+          template_params,
+          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+        )
+        .then(
+          (result) => {
+            console.log(result.text);
+          },
+          (error) => {
+            console.log(error.text);
+          }
+        );
     }
   };
 
@@ -80,7 +106,9 @@ const ChatInput: FC<Props> = ({ id, messageCount, project }) => {
     >
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
         <Flex gap={12}>
-          <Textarea w="100%" autosize={true}
+          <Textarea
+            w="100%"
+            autosize={true}
             {...register("content", { required: true })}
           />
           <Button type="submit">投稿</Button>
