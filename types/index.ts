@@ -25,3 +25,10 @@ export type Message = {
   author: string;
   createdAt: any;
 };
+
+export type User = {
+  id: string;
+  email: string;
+  isAdmin: boolean;
+  isEditor: boolean;
+};

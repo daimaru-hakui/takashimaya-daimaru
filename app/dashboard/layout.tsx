@@ -11,14 +11,17 @@ import {
   onSnapshot,
   orderBy,
   query,
+  setDoc,
   where,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { type Project } from "@/types";
+import { useSession } from "next-auth/react";
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
   const setCurrentUser = useStore((state) => state.setCurrentUser);
   const setProjects = useStore((state) => state.setProjects);
+  const session = useSession();
 
   onAuthStateChanged(auth, async (session) => {
     if (session) {
@@ -48,6 +51,23 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
     };
     getProjects();
   }, [setProjects]);
+
+  useEffect(() => {
+    if (session) {
+      if(!session.data?.user.email) return
+      const docRef = doc(db, "users", `${session.data?.user.uid}`);
+      const addAuthority = async () => {
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) return;
+        await setDoc(docRef, {
+          email: session.data?.user.email,
+          isAdmin: false,
+          isEditor: false,
+        });
+      };
+      addAuthority();
+    }
+  }, [session]);
 
   return (
     <Flex w="100%" mih="100vh" direction="column" bg="#f4f4f4">

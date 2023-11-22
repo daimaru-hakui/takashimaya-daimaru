@@ -11,7 +11,7 @@ import { useSession } from "next-auth/react";
 import React, { FC, useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import emailjs from "@emailjs/browser";
-import { Project } from "@/types";
+import { Project, User } from "@/types";
 
 interface Props {
   id: string;
@@ -26,25 +26,6 @@ type Inputs = {
 const ChatInput: FC<Props> = ({ id, messageCount, project }) => {
   const session = useSession();
   const [emails, setEmails] = useState<string[]>([]);
-
-  useEffect(() => {
-    const getUsers = async () => {
-      const coll = collection(db, "users");
-      const snapSHot = await getDocs(coll);
-      const object: any = snapSHot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      let array: string[] = [];
-      object.forEach((doc: any) => {
-        array.push(doc.email);
-      });
-      setEmails(array)
-    };
-    getUsers();
-  }, []);
-
-  const [content, setContent] = useState("");
   const {
     register,
     handleSubmit,
@@ -57,6 +38,24 @@ const ChatInput: FC<Props> = ({ id, messageCount, project }) => {
     reset();
   };
 
+  useEffect(() => {
+    const getUsers = async () => {
+      const coll = collection(db, "users");
+      const snapSHot = await getDocs(coll);
+      const users: User[] = snapSHot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      } as User));
+      let array: string[] = [];
+      users.forEach((user) => {
+        array.push(user.email);
+      });
+      setEmails(array)
+    };
+    getUsers();
+  }, []);
+
+
   const createMessage = async (data: Inputs) => {
     const coll = collection(db, "projects", `${id}`, "messages");
     await addDoc(coll, {
@@ -67,7 +66,7 @@ const ChatInput: FC<Props> = ({ id, messageCount, project }) => {
       deletedAt: null,
       read: [],
     });
-    setContent("");
+    reset()
   };
 
   const sendEmail = async (data: Inputs) => {
