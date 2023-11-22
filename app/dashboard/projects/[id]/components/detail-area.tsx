@@ -112,13 +112,13 @@ const DtailArea: FC<Props> = ({ id }) => {
             <Box c="gray" fz="sm">
               担当者1
             </Box>
-            <Box>{project?.staff1}</Box>
+            <Box>{project?.staff1}様</Box>
           </Box>
           <Box w="50%">
             <Box c="gray" fz="sm">
               担当者2
             </Box>
-            <Box>{project?.staff2}</Box>
+            <Box>{project?.staff2}様</Box>
           </Box>
         </Flex>
         <Flex w="100%">
