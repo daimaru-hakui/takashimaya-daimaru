@@ -5,6 +5,7 @@ import { useStore } from "@/store";
 import ProjectsTableRow from "../../projects/components/projects-table-row";
 import { useGetClosedProjects } from "@/hooks/useGetClosedProjects";
 import { statusList } from "@/utils/status-list";
+import Loading from "@/app/components/loader/loading";
 
 const ClosedProjectTable = () => {
   const filterClosedProjects = useStore((state) => state.filterClosedProjects);
@@ -65,6 +66,8 @@ const ClosedProjectTable = () => {
     endAt,
     searchStatus,
   ]);
+
+  if(isLoading) return <Loading/>
 
   return (
     <>
