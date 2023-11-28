@@ -24,6 +24,8 @@ type useState = {
   setCurrentUser: (payload: CurrentUser) => void;
   projects: Project[];
   setProjects: (payload: Project[]) => void;
+  closedProjects: Project[];
+  setClosedProjects: (payload: Project[]) => void;
   filterProjects: Project[];
   setFilterProjects: (payload: Project[]) => void;
   filterClosedProjects: Project[];
@@ -53,6 +55,8 @@ export const useStore = create<useState>((set) => ({
   setCurrentUser: (currentUser) => set({ currentUser }),
   projects: [],
   setProjects: (projects) => set({ projects }),
+  closedProjects: [],
+  setClosedProjects: (closedProjects) => set({ closedProjects }),
   filterProjects: [],
   setFilterProjects: (filterProjects) => set({ filterProjects }),
   filterClosedProjects: [],

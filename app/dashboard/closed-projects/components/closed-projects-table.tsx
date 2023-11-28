@@ -6,8 +6,14 @@ import ProjectsTableRow from "../../projects/components/projects-table-row";
 import { useGetClosedProjects } from "@/hooks/useGetClosedProjects";
 import { statusList } from "@/utils/status-list";
 import Loading from "@/app/components/loader/loading";
+import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { db } from "@/firebase/client";
+import { format } from "date-fns";
+import { Project } from "@/types";
 
 const ClosedProjectTable = () => {
+  const closedProjects = useStore((state)=>state.closedProjects)
+  const setClosedProjects = useStore((state)=>state.setClosedProjects)
   const filterClosedProjects = useStore((state) => state.filterClosedProjects);
   const setFilterClosedProjects = useStore(
     (state) => state.setFilterClosedProjects
@@ -25,13 +31,38 @@ const ClosedProjectTable = () => {
     return findStatus.value;
   };
 
-  console.log(data)
+  useEffect(() => {
+    const getClosedProjects = async () => {
+      const docsRef = collection(db, "projects");
+      const q = query(
+        docsRef,
+        where("deletedAt", "==", null),
+        where("isCompleted", "==", true),
+        orderBy("createdAt", "desc")
+      );
+      onSnapshot(q, (snapshot) => {
+        setClosedProjects(
+          snapshot.docs.map(
+            (doc) =>
+              ({
+                ...doc.data(),
+                id: doc.id,
+                createdAt: format(
+                  new Date(doc.data().createdAt.toDate()),
+                  "yyyy-MM-dd"
+                ),
+              } as Project)
+          )
+        );
+      });
+    };
+    getClosedProjects();
+  }, [setClosedProjects]);
 
   useEffect(() => {
-    if (!data) return;
     const clear = setTimeout(() => {
       setFilterClosedProjects(
-        data
+        closedProjects
           ?.filter((project) => project.title.includes(searchText))
           .filter(
             (project) =>
@@ -61,7 +92,7 @@ const ClosedProjectTable = () => {
     };
   }, [
     searchText,
-    data,
+    closedProjects,
     setFilterClosedProjects,
     searchStaff,
     startAt,
