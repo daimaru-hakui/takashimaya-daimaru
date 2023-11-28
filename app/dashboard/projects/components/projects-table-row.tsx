@@ -16,6 +16,7 @@ import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase/client";
 import { FcFolder } from "react-icons/fc";
 import { useStore } from "@/store";
+import { useRouter } from "next/navigation";
 
 interface Props {
   project: Project;
@@ -25,9 +26,9 @@ const ProjectTableRow: FC<Props> = ({ project }) => {
   const [progressRate, setProgressRate] = useState(0);
   const currentUser = useStore((state) => state.currentUser);
   const [status, setStatus] = useState("");
-  // console.log(currentUser)
+  const router = useRouter()
 
-  const OrderTypeLabel = (orderType: string) => {
+  const getOrderTypeLabel = (orderType: string) => {
     switch (orderType) {
       case "ORDER":
         return "別注";
@@ -90,6 +91,7 @@ const ProjectTableRow: FC<Props> = ({ project }) => {
       updateDoc(docRef, {
         isCompleted: false,
       });
+      router.push("/dashboard")
     } catch (error) {
       console.error(error);
     }
@@ -120,7 +122,7 @@ const ProjectTableRow: FC<Props> = ({ project }) => {
           size="lg"
           color={project?.orderType === "ORDER" ? "teal" : "blue"}
         >
-          {OrderTypeLabel(project.orderType)}
+          {getOrderTypeLabel(project.orderType)}
         </Badge>
       </Table.Td>
       <Table.Td style={{textAlign:"right"}} pr={30}>{project.sales.toLocaleString()}万</Table.Td>

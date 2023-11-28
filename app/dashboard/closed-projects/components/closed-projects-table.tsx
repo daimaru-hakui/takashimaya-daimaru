@@ -25,6 +25,8 @@ const ClosedProjectTable = () => {
     return findStatus.value;
   };
 
+  console.log(data)
+
   useEffect(() => {
     if (!data) return;
     const clear = setTimeout(() => {
