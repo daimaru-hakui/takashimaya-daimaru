@@ -26,7 +26,7 @@ const ClosedSearchArea = () => {
       setClosedProjects(result)
     };
     getClosedProjects()
-  }, []);
+  }, [setClosedProjects]);
 
 
 

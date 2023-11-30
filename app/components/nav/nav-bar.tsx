@@ -7,9 +7,11 @@ import React, { FC } from "react";
 import { MdLogout } from "react-icons/md";
 import NavBarItem from "./nav-bar-item";
 import NavDrawer from "./nav-drawer";
+import { AiOutlineFileAdd } from "react-icons/ai";
+import { useStore } from "@/store";
 
 const NabBar: FC = () => {
-
+  const currentUser = useStore((state) => state.currentUser);
   const logout = () => {
     signOut();
   };
@@ -49,6 +51,11 @@ const NabBar: FC = () => {
                 </Link>
               ))}
             </Flex>
+            {currentUser?.isEditor && (
+              <Link href={"/dashboard/projects/new"}>
+                <NavBarItem title={"案件登録"} icon={<AiOutlineFileAdd />} />
+              </Link>
+            )}
             <NavBarItem
               title="ログアウト"
               icon={<MdLogout />}

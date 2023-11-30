@@ -6,8 +6,14 @@ export type Project = {
   deadline: string;
   sales: number;
   progress: number;
-  status: "PROGRESS" | "PENDING" | "DECIDED" | "NEGOTIATION" |"CLAIM"| "REJECTED";
-  orderType: string;
+  status:
+    | "PROGRESS"
+    | "PENDING"
+    | "DECIDED"
+    | "NEGOTIATION"
+    | "CLAIM"
+    | "REJECTED";
+  orderType: "READY" | "ORDER";
   fileLink: string;
   todos: {
     title: string;
@@ -31,4 +37,25 @@ export type User = {
   email: string;
   isAdmin: boolean;
   isEditor: boolean;
+};
+
+export type Contact = {
+  id: string;
+  title: string;
+  numberOfPeople: number;
+  quantityPerPerson: number;
+  responseDeadline: string;
+  deadline: string;
+  orderType: "READY" | "ORDER";
+  inquiryType: "ESTIMATE" | "PROPOSAL";
+  content: string;
+  deletedAt: null;
+  createdAt: any;
+  images: {
+    url: string;
+    path: string;
+    type: string;
+    name: string;
+  }[];
+  user: User
 };

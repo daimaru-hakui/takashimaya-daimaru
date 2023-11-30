@@ -9,6 +9,8 @@ export type CurrentUser = {
 } | null;
 
 type useState = {
+  isLoading: boolean;
+  setIsLoading: (payload: boolean) => void;
   searchText: string;
   setSearchText: (payload: string) => void;
   searchStaff: string;
@@ -33,6 +35,8 @@ type useState = {
 };
 
 export const useStore = create<useState>((set) => ({
+  isLoading: false,
+  setIsLoading: (isLoading) => set({ isLoading }),
   searchText: "",
   setSearchText: (searchText) => set({ searchText }),
   searchStaff: "",

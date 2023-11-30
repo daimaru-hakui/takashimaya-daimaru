@@ -18,8 +18,13 @@ export const headerLinks = [
     icon: <AiOutlineUnorderedList />,
   },
   {
-    title: "案件登録",
-    path: "/dashboard/projects/new",
+    title: "案件依頼一覧",
+    path: "/dashboard/contacts/",
+    icon: <AiOutlineUnorderedList />,
+  },
+  {
+    title: "案件依頼登録",
+    path: "/dashboard/contacts/new",
     icon: <AiOutlineFileAdd />,
   },
 ];

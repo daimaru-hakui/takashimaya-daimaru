@@ -12,7 +12,7 @@ import {
 } from "@mantine/core";
 import React, { FC, useState } from "react";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
-import classes from "./NumberInput.module.css";
+import classes from "@/components/NumberInput.module.css";
 import {
   addDoc,
   collection,

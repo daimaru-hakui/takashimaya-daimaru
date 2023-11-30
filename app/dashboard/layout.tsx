@@ -18,10 +18,12 @@ import { onAuthStateChanged } from "firebase/auth";
 import { type Project } from "@/types";
 import { useSession } from "next-auth/react";
 import { format } from "date-fns";
+import Loading from "../components/loader/loading";
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
   const setCurrentUser = useStore((state) => state.setCurrentUser);
   const setProjects = useStore((state) => state.setProjects);
+  const isLoading = useStore((state) => state.isLoading);
   const session = useSession();
 
   onAuthStateChanged(auth, async (session) => {
@@ -86,6 +88,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
       <Box w="100%" maw={1300} mx="auto" mih={"calc(100vh - 50px)"} p="lg">
         {children}
       </Box>
+      {isLoading && <Loading />}
     </Flex>
   );
 }
