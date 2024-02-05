@@ -36,7 +36,7 @@ const NabBar: FC = () => {
           align="center"
         >
           <Link href="/dashboard">
-            <Box fw="bold">髙島屋様ポータルサイト</Box>
+            <Box fw="bold">案件管理APP</Box>
           </Link>
           <Flex gap={16} display={{ base: "none", md: "flex" }}>
             <Flex gap={16}>
